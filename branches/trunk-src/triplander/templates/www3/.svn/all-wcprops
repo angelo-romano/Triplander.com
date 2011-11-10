@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/!svn/ver/47/branches/trunk-src/triplander/templates/www3
+END
+airport_summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/!svn/ver/44/branches/trunk-src/triplander/templates/www3/airport_summary.html
+END
+site_about.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/!svn/ver/44/branches/trunk-src/triplander/templates/www3/site_about.html
+END
+site_contact.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/!svn/ver/44/branches/trunk-src/triplander/templates/www3/site_contact.html
+END
+country_summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/!svn/ver/44/branches/trunk-src/triplander/templates/www3/country_summary.html
+END
+city_ambiguity.html
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/!svn/ver/44/branches/trunk-src/triplander/templates/www3/city_ambiguity.html
+END
+style.css
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/44/branches/trunk-src/triplander/templates/www3/style.css
+END
+city_summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/!svn/ver/47/branches/trunk-src/triplander/templates/www3/city_summary.html
+END
+index2.html
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/47/branches/trunk-src/triplander/templates/www3/index2.html
+END
+base.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/47/branches/trunk-src/triplander/templates/www3/base.html
+END
+city_airports.html
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/!svn/ver/47/branches/trunk-src/triplander/templates/www3/city_airports.html
+END

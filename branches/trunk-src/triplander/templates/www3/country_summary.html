@@ -1,0 +1,99 @@
+{% extends "www3/base.html" %}
+{% block js_external_scripts %}
+{% endblock %}
+{% block js_onload %}
+$("#searchfield_country_which").autocomplete("{% url blue_autocomplete_country %}",{
+    minChars: 1,
+	formatItem: formatAutocompleter,
+	setHiddenValues: setCountryAutocompleterHidden});
+{% if tl_country.id %}
+$.getJSON("{% url blue_wikipedia_country tl_country.id %}", function(json){
+	$("#wikipedia_widget_snippet").css("display", "block");
+	$("#wikipedia_widget_snippet").html(json.content);
+	$("#wikipedia_widget_footer").css("display", "block");
+    $("#wikipedia_widget_footer > a").attr("href", "http://en.wikipedia.org/wiki/"+json.wikiname);
+});
+{% endif %}
+{% endblock %}
+{% block content %}
+<div id="geosummary">
+<!--  SEARCH BOX -->
+<div class="search_section" id="search_section_country">
+    <form method="post" action="{% url country_searchpost %}" 
+    onsubmit="submitAutocompleteLocationForm('country',this); return false;">
+    	<fieldset style="display: inline; vertical_align: middle; ">
+		<label for="searchfield_country_which"><img alt="Search" src="/static/images/lens.png" /></label>
+		<input type="text" value="" id="searchfield_country_which" name="query" />
+		<input type="hidden" value="" id="searchfield_country_id" />
+		<input type="submit" class="go" value=""></input>
+	</fieldset>
+	</form>
+</div>
+
+{% if tl_title %}
+<h2><img class="flagMini" alt="Flag" src="{{ tl_country.icon }}" />{{ tl_title }}</h2>
+<div class="content">
+<div class="col2_leftalign">
+
+<!-- Wikipedia widget -->
+<div class="widget_left" id="wikipedia_widget">
+<h3>Wikipedia</h3>
+<p id="wikipedia_widget_snippet"></p>
+<p class="widget_footer" id="wikipedia_widget_footer">For more details, read the corresponding <a href="#">Wikipedia article</a>.</p>
+</div>
+
+</div>
+
+<div class="col2_rightalign">
+<div class="widget_right" id="country_info_widget">
+<h3>Info</h3>
+<ul>
+<li><strong>Local name</strong>: {{ tl_country.localname }}</li>
+<li><strong>Capital city</strong>: <a href="{% url city_by_id tl_country.capital.id,tl_country.capital.slug %}">{{ tl_country.capital.name }}</a></li>
+<li><strong>Currency</strong>: {{ tl_country.currency }}</li>
+<li><strong>Language(s)</strong>: {{ tl_country.languages }}</li>
+</ul>
+</div>
+<div class="widget_right" id="country_depiction_widget">
+<h3>Where Is At?</h3>
+<img src="{{ tl_country.map }}" alt="Country map of {{ tl_country.name }}" />
+<p class="widget_footer">From Wikimedia Commons</p>
+</div>
+<!--
+<div class="widget_right" id="rating_widget">
+<h3>Country Rating</h3>
+<img src="/static/images/ratings/{{ tl_rating_imgfile }}" alt="Rating: {{ tl_rating_val }}" />
+</div>
+//-->
+<!--  Links widget -->
+<!--
+<div class="widget_right" id="links_widget">
+<h3>Links</h3>
+<a href="#">Map of country airports</a>
+</div>
+//-->
+{% if tl_googlemaps_active %}
+<!-- Google Maps widget -->
+<!--
+<div class="widget_right" id="googlemaps_widget">
+<h3>Geo Location</h3>
+<div id="{{ tl_googlemaps.dom_id }}" class="googlemap_mini"></div>
+</div>
+//--> 
+{% endif %}
+<!-- Top Cities widget -->
+<div class="widget_right" id="topcities_widget">
+<h3>Top cities by ranking</h3>
+{% for item in tl_top_cities %}
+<p><a href="{% url city_by_id item.id, item.slug %}">{{ item.fullname }}</a><br /><img src="/static/images/ratings/{{ item.rating_img }}" alt="Rating: {{ item.rating }}" /></p>
+{% endfor %}
+</div>
+
+</div>
+<div class="col2_spaceline"></div>
+</div>
+{% else %}
+<h2>Country not found</h2>
+{% endif %}
+</div>
+{% endblock %}

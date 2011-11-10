@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load cache %}
+{% if tl_googlemaps_active %}
+<html {{ tl_googlemaps.xmlns }}>
+{% else %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+{% endif %}
+<head>
+	<link href="/static/style.css" media="screen" rel="Stylesheet" type="text/css" />
+	<title>Triplander.com</title>
+	{% if tl_googlemaps_active %}
+	{{ tl_googlemaps.style }}
+	{{ tl_googlemaps.scripts }}
+	{% endif %}
+    <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAA8YuyHu68hQTivoDIZS1VChScCbIvVPg0be-YWXpRP9_p6iZLsxRsgDaxlzs3Au0eV0ke7pHaGZJgrg"></script>
+    <script type="text/javascript">
+	google.load("jquery", "1.2.6");
+	//google.load("jqueryui");
+	</script>
+	
+    <!-- Base JavaScript Settings -->
+	<script type="text/javascript">
+	var BaseJSSettings = {
+	{% block js_base_settings %}{% endblock %}
+		blueURL_city_add       : '{% url blue_city_add %}',
+		blueURL_city_edit      : '{% url blue_city_edit %}',
+		blueURL_city_getPopular: '{% url BASE_blue_popular_cities %}',
+		blueURL_user_login     : '{% url blue_user_login %}',
+		blueURL_user_logout    : '{% url blue_user_logout %}',
+	{% if tl_logged_user.is_logged %}
+		// logged user
+		logged_user_name       : '{{tl_logged_user.username}}',
+		logged_user_id         : '{{tl_logged_user.id}}',
+	{% else %}
+	    // not a logged user
+		logged_user_name       : '',
+		logged_user_id         : '',
+	{% endif %}
+		isBase                 : 1
+	};
+	</script>
+
+    <script type="text/javascript" src="{% url js_script "user_management.js" %}"></script>
+    <script type="text/javascript" src="{% url js_script "autocomplete.js" %}"></script>
+    {% block js_external_scripts %}{% endblock %}
+	<script type="text/javascript">
+	{% block js_vars %}
+	{% endblock %}
+	{% block js %}{% endblock %}
+	function tl_onLoad() {
+		CurrentUser.init();
+	{% if tl_googlemaps_active %}{{tl_googlemaps.js_module}}.load();{% endif %}
+	{% block js_onload %}{% endblock %}
+	}
+	function tl_onUnload() {
+	{% if tl_googlemaps_active %}GUnload();{% endif %}
+	{% block js_onunload %}{% endblock %}
+	}
+    </script>
+</head>
+<body onload="tl_onLoad()" onunload="tl_onUnload()">
+	<div id="header_logo"><a href="{% url site_home %}"><img alt="Logo" src="/static/images/logo.png" /></a></div>
+	
+	<!-- LOGIN BLOCK -->
+	<div id="header_login">
+		{% if tl_logged_user.is_logged %}
+		Welcome <span id="login_current_user">{{ tl_logged_user.username }}</span> | <a href="#" onclick="CurrentUser.logoutUser();">Logout</a>
+		{% else %}
+		<a href="#" onclick="$('#header_login_form').css('display','block');">Login</a>
+		{% endif %}
+		{% cache 468000 base_login_div %}
+		<div id="header_login_form">
+			<fieldset>
+				<label for="login_username">Username</label>
+				<input type="text" id="login_username" name="login_username" value="" />
+			</fieldset>
+			<fieldset>
+				<label for="login_password">Password</label>
+				<input type="password" id="login_password" name="login_password" value="" />
+			</fieldset>
+			<button class="login" onclick="CurrentUser.loginUser();">Log In</button>
+			<button class="close_button" onclick="$('#header_login_form').css('display','none');"></button>
+		</div>
+		{% endcache %}
+	</div>
+	<div class="divide"></div>
+	
+	<br style="clear: both;"/>
+	<div class="header_hr"></div>
+	<div id="main">	
+	{% block content %}{% endblock %}
+	</div>
+	{% cache 468000 base_website_footer %}
+	<div class="header_hr"></div>
+	<div id="footer2">
+		<img alt="CSS" src="/static/images/button-css.png" />
+		<img alt="Django" src="/static/images/button-django.png" />
+		<img alt="XHTML" src="/static/images/button-xhtml.png" />
+	</div>
+	<div id="footer">
+	<a href="{% url site_about %}">About</a> | <a href="{% url site_contact %}">Contact</a>
+	<p>Copyright &copy; 2008 Triplander.com. All rights reserved.<br />Triplander.com is not responsible for content on external web sites.</p>
+	</div>
+	{% endcache %}
+</body>
+</html>

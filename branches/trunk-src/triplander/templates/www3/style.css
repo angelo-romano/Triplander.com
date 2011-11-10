@@ -1,0 +1,230 @@
+/* body */
+body { text-align: center; padding:0 4px 0 4px; }
+
+/* input fields/related elements */
+input[type="radio"] { display: inline; }
+input[type="text"] { border: 1px solid #445500; min-width: 48px; }
+select { border: 1px solid #445500; min-width: 64px; }
+fieldset { border: 0; text-align: right; padding-bottom: 2px; white-space: nowrap; padding-right: 0;
+padding-left: 0; }
+
+/* hyperlinks */
+a, a:hover, a:active, a:link, a:visited { color: inherit; font-style: italic; text-decoration: none; }
+
+/* header */
+#header_logo { width: 303px; height: 103px; position: relative; left:0; top:0; margin: 4px 4px 4px 4px;
+float: left; background: transparent; }
+#header_logo img { border: 0; }
+
+/* header - login box */
+#header_login { float: right; position: relative; right: 0; top: 0; font-size: 11px; padding: 4px; 
+border: solid #b0b0b0 1px; }
+#header_login #header_login_form { background-color: #f2f2f2; border: 2px solid black; position: absolute;  
+margin: 4px 4px 4px 4px; padding: 4px 4px 4px 4px; width: 208px; height: 101px; display: none; right: 0; top: 0; }
+#header_login #header_login_form fieldset { float: right; clear: right; display: block; }
+#header_login #header_login_form fieldset label { color: #d40000; text-align: right;padding-right: 4px; display: inline; }
+#header_login #header_login_form fieldset input { background-color: #ffdcdc; border: 1px solid black; 
+width: 96px; height: 18px; }
+#header_login #header_login_form button.login { background-color: #d40000; color: #ffffff; 
+border: 1px solid black; width: 54px; height: 20px; text-align: center; white-space: nowrap; 
+position: absolute; left: 132px; top: 80px; font-size: 13px; padding: 2px 2px 2px 2px; }
+#header_login #header_login_form button.close_button { position: absolute; left: 2px; top: 2px; }
+#header_login .divide { position: absolute; bottom: 0; left: 0;
+background: url('images/loginbox_divide.png') no-repeat top right; width: 158px; height: 41px; }
+
+div.header_hr { background-color: #d40000; border: 0; height: 12px; width: 100%; margin: 4px auto 4px auto; }
+
+/* main content */
+#main { background-color: white; border: 0; margin: 8px auto 8px auto; width: 99%; padding-top: 2px;
+padding-bottom: 4px; display: table; vertical-align: top; }
+
+/* main content - home page */
+#main #search_box { border: 2px solid #006680; background-color: #f9f9f9;
+height: 230px; width: 67%; margin: 8px auto 8px auto; padding: 4px 4px 4px 4px; 
+clear: left; position: relative; } 
+#main #search_box h2 { font-size: 20px; color: black; font-style: normal; font-weight: bold;
+text-align: left; margin-top: 0;}
+#main #search_box span.search_box_type { font-size: 20px; color: #151616;
+background: url('images/h2_divide.png') no-repeat top left; padding-left: 30px;
+margin-left: 4px; padding-bottom: 32px; }
+#main #search_box fieldset { float: left; display: block; position: relative; }
+#main #search_box fieldset label { display: inline; position: relative; }
+input[type="submit"].go { background: no-repeat top left url('/static/images/btn_go.png'); 
+width: 48px; height: 18px; border: 0; vertical-align: middle; margin-left: 8px;}
+#main #search_box div.search_form { border: 1px solid black; background-color: #f2f2f2;
+vertical-align: middle; margin-left: 20px; min-width:100px; min-height: 30px; z-index: 200;
+line-height: 1.9em; text-align: left; padding: 4px 48px 4px 4px; white-space: nowrap; overflow: auto;
+position: relative; overflow: hidden; }
+#main #search_box div.search_form button { width: 28px; height: 28px;
+background: url('images/search_ok_button.png') no-repeat top left; border: 0; position: absolute;
+right: 4px; vertical-align: middle; bottom: 16px; cursor: pointer; }
+#main #search_box .left_arrow { background: url('images/conn_arrow_right.png') no-repeat top left;
+padding-left: 2px; padding-top: 2px; }
+#main #search_box div.table_row { display: block; min-width:330px; clear: both;}
+#main #search_box div.table_cell_field, #main #search_box div.table_cell_form { float: left;}
+#main #search_box div.table_cell_field { min-width: 140px; }
+#main #search_box div.table_cell_form { min-width: 190px; min-height: 9px; }
+#main #search_box #search_box_footer { position: absolute; bottom: 4px; left: 4px; font-style: italic; }
+#main #search_box #search_box_footer a, 
+#main #search_box #search_box_footer a:hover, 
+#main #search_box #search_box_footer a:active,
+#main #search_box #search_box_footer a:focus,
+#main #search_box #search_box_footer a:visited { margin-left: 4px; margin-right: 4px;
+color: #007690; text-decoration: none; font-style: normal;  }
+#main #search_box #search_box_footer a:active { color: #404040; }
+#main #search_box #search_box_footer a:hover { border-bottom: 1px dotted #0088A0; }
+#main #search_box div.search_box_variant { display: none; }
+#main #search_box span.searchtype_link { background-color: #E6E6E6; }
+#main #search_box fieldset { float: left; clear: left; margin: 0 0 0.5em 0; padding: 0; }
+#main #search_box fieldset label { float: left; width: 12em; margin-right: 1em; text-align: right; }
+
+#main #search_box div.count_info { background-color: #f0f0c0; border:1px inset #505050;
+float: right; padding: 0 4px; }
+#main #search_box div.count_info p { margin: 1px; padding: 0; font-size: 11px; font-style: italic; }
+#main #search_box div.count_info p em { font-weight: bold;  }
+
+/* main content - various formattings */
+#main div.collapsable_box { float: left; background-color: #ccffaa; border: 2px solid #333333;
+color: black; width: 200px; min-height: 100px; margin-left: 8px; margin-top: 2px;
+padding: 4px 4px 4px 4px; position: relative; }
+#main div.collapsable_box h2 { font-size: 16px; color: black; font-style: normal; font-weight: bold;
+text-align: left; margin-top: 0; }
+#main div.collapsable_box button.minimize { cursor: pointer; width: 11px; height: 11px;
+background: url('images/icon_minimize.png') no-repeat top left;  position: absolute;
+top: 4px; right: 4px; border: 0; }
+
+.col2_leftalign { float: left; text-align: left; margin: 0; padding: 0; width: auto; }
+.col2_leftalign p, .col2_rightalign p { width: auto; text-indent: 0; padding: 0.3em 0.3em 0; }
+.col2_rightalign { float: left; text-align: right; margin: 0; padding: 0; width: auto; }
+.col2_spaceline { clear: both; margin: 0; padding: 0; width: auto; height: 3em; }
+
+/* google maps */
+.googlemap_large, .googlemap_medium, .googlemap_mini { text-align: right; clear: right; 
+margin: 8px 8px 0 0; padding: 6px 0 0 6px; border: 1px solid black; display: block; }
+.googlemap_large { width: 900px; height: 500px; font-size: 18px; }
+.googlemap_medium { width: 600px; height: 400px; font-size: 18px; }
+.googlemap_mini { width: 280px; height: 200px; font-size: 14px; }
+
+/* main content - google map at home page */
+#main #geomap_europe { background: url('images/map_europe_600px.png') no-repeat top left;
+width: 600px; height: 437px; border: 2px solid #333333; float: left; clear: both; position: relative; }
+#main #geomap_europe div.marker { white-space: nowrap; background: #ff1040; height: 8px;
+position: absolute; }
+#main #geomap_europe div.googlemap_medium { top: 0; right: 0; position: absolute; }
+
+/* divide row */
+div.separator { width: 98%; clear: both; height: 8px; border: 0; background-color: #d7eef4; }
+
+/* main content - footer */
+#footer { clear: both; width: 98%; font-size: 14px; vertical-align: middle; 
+padding: 7px 4px 7px 4px; text-align: left; margin-left: 20px; }
+#footer a:hover { color: #ffc011; }
+#footer p { vertical-align: middle; font-size: 12px; }
+#footer2 { text-align: center; width: 98%; border: 0; margin-top: 4px; float: left;
+margin-bottom: 0; position: relative; vertical-align: bottom; }
+#footer2 img { border: 0; margin: 4px 4px 4px 4px; }
+p.evidence:hover { font-weight:bold; background: #efef10;}
+#header_logo a, #header_logo a:hover { border-width: 0; }
+
+/* country flag configurations */
+img.flagMini { float: left; vertical-align: middle; border: 1px solid #909090;
+padding:1px 1px 1px 1px; background-color: #fff; margin: 4px 8px 4px 16px; }
+
+/* main content - ambiguity page */
+#main #geoambiguity { clear: left; display: block; text-align: left; }
+#main #geoambiguity p { font-size: 24px; margin-left: 8px; }
+#main #geoambiguity ul {font-size: 20px; }
+#main #geoambiguity ul li {margin: 8px 0 8px 12px; }
+#main #geoambiguity ul li img {vertical-align: bottom; margin-right: 8px}
+#main #geoambiguity ul li a:hover { background-color: #dfdf7f; }
+
+/* main content - geosummary page (city/country...) */
+#main #geosummary { clear: left; display: block; }
+#main #geosummary button.edit_content { vertical-align: text-bottom; border: 0; width: 20px; height: 24px; margin: 4px; background: url('/static/images/btn_pencil_edit.png') no-repeat; }
+#main #geosummary h2 { text-align: left; padding-left: 16px; }
+#main #geosummary h2 img.flagMini {vertical-align: text-bottom; overflow: hidden; }
+#main #geosummary div.search_section { background-color: #c7dee4; margin: 0;
+border: 2px solid #101060; vertical-align: super; text-align: right; padding: 0 8px 0 0; }
+#main #geosummary div.search_section label img { vertical-align: middle; }
+
+#main #geosummary div.content { margin: 0 auto; padding: 0; text-align: center; width: 96%; }
+#main #geosummary div.widget_left, #main #geosummary div.widget_right { border: 2px solid #cf1010;
+background-color: #efefef; margin: 4px 4px 4px 4px;
+padding: 4px 4px 4px 4px; color: #3030af; }
+#main #geosummary .col2_leftalign { float: left; margin-right: 368px; }
+#main #geosummary .col2_rightalign { float: right; width: 360px; overflow: hidden; margin-left: -360px; }
+#main #geosummary div.widget_hidden { display: none; }
+#main #geosummary div.widget_left { float: left; clear: left; text-align: left; width: 100%; }
+#main #geosummary div.widget_right { float: right; clear: right; text-align: right; width: 310px; }
+#main #geosummary div.widget_left h3, #main #geosummary .widget_right h3 { font-size: 16px;
+font-weight: bold; color: #101070; text-decoration: underline; text-align: left; margin-top: 0; }
+#main #geosummary div.widget_right a:hover { background-color: #dfdfdf; }
+#main #geosummary .widget_footer { font-style: italic; }
+#main #geosummary .widget_footer a { border-bottom: 1px dotted #3030af;  }
+#main #geosummary #rating_widget img { border: 0; width: 192px; height: 44px; }
+#main #geosummary #wikipedia_widget_footer { display: none; }
+#main #geosummary #wikipedia_widget_snippet { width: 100%; overflow: hidden; }
+#main #geosummary #photo_widget div.photo { border: 0; display: none; }
+#main #geosummary #photo_widget div.photo img { border: 2px outset #af3030; }
+#main #geosummary #weather_widget .conditions { border: 0; display: none; text-align: center;
+width: 114px; float: left; margin: 2px 4px 10px 4px; }
+#main #geosummary #weather_widget .conditions img { border: 1px solid #101010; }
+#main #geosummary #weather_widget #weather_current_conditions { width: 114px;
+border-right: 2px solid #102060; padding-right: 10px; margin-right: 22px; }
+#main #geosummary #weather_widget p.time { font-size: 13px; font-weight: bold; font-style: italic;
+color: #301080; }
+#main #geosummary #weather_widget p.temperature,
+#main #geosummary #weather_widget p.temperature_high,
+#main #geosummary #weather_widget p.temperature_low { font-size: 16px; font-weight: bold; }
+#main #geosummary #weather_widget p.temperature_high { color: #C02020; }
+#main #geosummary #weather_widget p.temperature_low { color: #5096C0; }
+#main #geosummary #weather_widget p.temperature { color: #102060; }
+#main #geosummary #country_info_widget ul { list-style: none; }
+#main #geosummary #country_depiction_widget p.widget_footer { font-size: 16px; margin-top: 2px; margin-bottom: 2px; }
+
+/* base popup configuration */
+#main div.popup { position: absolute; border: solid black 4px; background-color: #707070; 
+font-size: 14px; z-index: 10; display: none; padding: 10px 10px 10px 10px; }
+
+/* popup standard formatting/icons */
+#main div.popup span.mandatory_field { color: #c40000; font-weight: bolder; }
+#main div.popup div.coordinates_field { white-space: nowrap; display: inline; }
+#main div.popup div.coordinates_field input[type="text"] { width: 60px; }
+#main div.popup button.external_call { margin: 0 2px 0 2px; width: 16px; height: 10px; border: 0; background: url('/static/images/btn_arrow_external.png') no-repeat; }
+button.close_button { 
+position: absolute; cursor: pointer; 
+background: url('/static/images/btn_close.png'); margin: 2px; 
+width: 32px; height: 32px; border: 0; }
+
+/* geomap popup */
+#main #geomap_popup .googlemap_large { position: absolute; left: 5px; top: 0; }
+#main #geomap_popup { left: 70px; top: 10px; width: 900px; height: 500px; }
+#main #geomap_popup button.close_button { left: 56px; top: 16px; }
+
+/* Add/edit city popup */
+#main #addcity_popup,
+#main #editcity_popup { left: 128px; top: 190px; padding-top: 40px; }
+#main #addcity_popup button.close_button,
+#main #editcity_popup button.close_button { left: 4px; top: 4px; }
+div.popup div.loading { background-color: #efefef; border: 1px groove #707090; 
+font-size: 11px; text-align: left; margin: 2px 2px 2px 6px; 
+position: absolute; right: 0; top: 0; padding: 2px; display: none; } 
+
+/* Static site content (e.g., About, Contact...) */
+#main #site_content { text-align: left; padding: 4px; }
+#main #site_content a { border-bottom: 1px dotted #606060; }
+#main #site_content span.li_value { font-style: italic; border-bottom: 1px dotted #606060; } 
+
+/* main content - autocompleter */
+.ac_results { padding: 0px; border: 1px solid WindowFrame; background-color: Window;
+overflow: hidden; text-align: left; z-index: 100; }
+.ac_results ul { width: 100%; list-style-position: outside; list-style: none;
+padding: 0; margin: 0; }
+.ac_results iframe { display:none;/*sorry for IE5*/ display/**/:block;/*sorry for IE5*/
+position: absolute; top: 0; left: 0; z-index: -1; filter:mask(); width:3000px; 
+height:3000px; }
+.ac_results li { margin: 0px; padding: 2px 5px; cursor: pointer; display: block;
+width: 100%; font: menu; font-size: 12px; overflow: hidden; 
+border-bottom: 1px dotted #606060; font-style: italic; }
+.ac_loading { background: Window url('/static/images/indicator.gif') right center no-repeat; }
+.ac_over { background-color: Highlight; color: HighlightText; }

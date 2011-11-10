@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 24
+/!svn/ver/8/branches/etc
+END
+settings.py
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/!svn/ver/6/branches/etc/settings.py
+END
+style.css
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/!svn/ver/8/branches/etc/style.css
+END
+autocomplete.js
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/!svn/ver/8/branches/etc/autocomplete.js
+END

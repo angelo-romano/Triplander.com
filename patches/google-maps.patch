@@ -1,0 +1,273 @@
+Index: django/contrib/gis/templates/gis/google/js/google-map.js
+===================================================================
+--- django/contrib/gis/templates/gis/google/js/google-map.js	(revisione 9728)
++++ django/contrib/gis/templates/gis/google/js/google-map.js	(copia locale)
+@@ -1,34 +1,45 @@
+-{% autoescape off %}{% block vars %}var map;{% endblock %}
++{% autoescape off %}{% block vars %}var maps;{% endblock %}
+ {% block functions %}{% endblock %}
+ {% block load %}function {{ load_func }}(){
++  maps = new Array();
++
++  {% for map in maps %}//initializing map {{ map.id }}
+   if (GBrowserIsCompatible()) {
+-    map = new GMap2(document.getElementById("{{ dom_id }}"));
+-    map.setCenter(new GLatLng({{ center.1 }}, {{ center.0 }}), {{ zoom }});
+-    {% block controls %}map.addControl(new GSmallMapControl());
+-    map.addControl(new GMapTypeControl());{% endblock %}
+-    {% if calc_zoom %}var bounds = new GLatLngBounds(); var tmp_bounds = new GLatLngBounds();{% endif %}
+-    {% for kml_url in kml_urls %}var kml{{ forloop.counter }} = new GGeoXml("{{ kml_url }}");
+-    map.addOverlay(kml{{ forloop.counter }});{% endfor %}
++    maps[{{map.id}}] = new GMap2(document.getElementById("{{ map.dom_id }}"));
++    maps[{{map.id}}].setCenter(new GLatLng({{ map.center.1 }}, {{ map.center.0 }}), {{ map.zoom }});
++    {% block controls %}maps[{{map.id}}].addControl(new GSmallMapControl());
++    maps[{{map.id}}].addControl(new GMapTypeControl());{% endblock %}
++    {% if map.calc_zoom %}var bounds = new GLatLngBounds(); var tmp_bounds = new GLatLngBounds();{% endif %}
++    {% for kml_url in map.kml_urls %}var kml{{ forloop.counter }} = new GGeoXml("{{ kml_url }}");
++    maps[{{map.id}}].addOverlay(kml{{ forloop.counter }});{% endfor %}
+ 
+-    {% for polygon in polygons %}var poly{{ forloop.counter }} = new {{ polygon }};
+-    map.addOverlay(poly{{ forloop.counter }});
+-    {% for event in polygon.events %}GEvent.addListener(poly{{ forloop.parentloop.counter }}, {{ event }});{% endfor %}
+-    {% if calc_zoom %}tmp_bounds = poly{{ forloop.counter }}.getBounds(); bounds.extend(tmp_bounds.getSouthWest()); bounds.extend(tmp_bounds.getNorthEast());{% endif %}{% endfor %}
++    {% for polygon in map.polygons %}var poly{{ forloop.counter }} = new {{ polygon }};
++    maps[{{map.id}}].addOverlay(poly{{ forloop.counter }});
++    {% for event in map.polygon.events %}GEvent.addListener(poly{{ forloop.parentloop.counter }}, {{ event }});{% endfor %}
++    {% if map.calc_zoom %}tmp_bounds = poly{{ forloop.counter }}.getBounds(); bounds.extend(tmp_bounds.getSouthWest()); bounds.extend(tmp_bounds.getNorthEast());{% endif %}{% endfor %}
+ 
+-    {% for polyline in polylines %}var polyline{{ forloop.counter }} = new {{ polyline }};
+-    map.addOverlay(polyline{{ forloop.counter }});
+-    {% for event in polyline.events %}GEvent.addListener(polyline{{ forloop.parentloop.counter }}, {{ event }}); {% endfor %}
+-    {% if calc_zoom %}tmp_bounds = polyline{{ forloop.counter }}.getBounds(); bounds.extend(tmp_bounds.getSouthWest()); bounds.extend(tmp_bounds.getNorthEast());{% endif %}{% endfor %}
++    {% for polyline in map.polylines %}var polyline{{ forloop.counter }} = new {{ polyline }};
++    maps[{{map.id}}].addOverlay(polyline{{ forloop.counter }});
++    {% for event in map.polyline.events %}GEvent.addListener(polyline{{ forloop.parentloop.counter }}, {{ event }}); {% endfor %}
++    {% if map.calc_zoom %}tmp_bounds = polyline{{ forloop.counter }}.getBounds(); bounds.extend(tmp_bounds.getSouthWest()); bounds.extend(tmp_bounds.getNorthEast());{% endif %}{% endfor %}
+     
+-    {% for marker in markers %}var marker{{ forloop.counter }} = new {{ marker }};
+-    map.addOverlay(marker{{ forloop.counter }});
+-    {% for event in marker.events %}GEvent.addListener(marker{{ forloop.parentloop.counter }}, {{ event }}); {% endfor %}
+-    {% if calc_zoom %}bounds.extend(marker{{ forloop.counter }}.getLatLng()); {% endif %}{% endfor %}
++    {% for marker in map.markers %}var marker{{ forloop.counter }} = new {{ marker }};
++    maps[{{map.id}}].addOverlay(marker{{ forloop.counter }});
++    {% for event in map.marker.events %}GEvent.addListener(marker{{ forloop.parentloop.counter }}, {{ event }}); {% endfor %}
++    {% if map.calc_zoom %}bounds.extend(marker{{ forloop.counter }}.getLatLng()); {% endif %}{% endfor %}
+ 
+-    {% if calc_zoom %}map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));{% endif %}
++    {% if map.calc_zoom %}maps[{{map.id}}].setCenter(bounds.getCenter(), maps[{{map.id}}].getBoundsZoomLevel(bounds));{% endif %}
+     {% block load_extra %}{% endblock %}
++
+   }else {
+     alert("Sorry, the Google Maps API is not compatible with this browser.");
++  }{% endfor %}
+   }
++
++// getIcon function - used to return a personalized GMarker
++function gmap_getIcon(path,width,height) {
++  var gicon = new GIcon(G_DEFAULT_ICON, path);
++  if(height != undefined && width != undefined) { gicon.iconSize = new GSize(width,height); }
++  return gicon;
+ }
+ {% endblock %}{% endautoescape %}
+Index: django/contrib/gis/maps/google/__init__.py
+===================================================================
+--- django/contrib/gis/maps/google/__init__.py	(revisione 9728)
++++ django/contrib/gis/maps/google/__init__.py	(copia locale)
+@@ -56,6 +56,6 @@
+    * GOOGLE_MAPS_URL (optional): Must have a substitution ('%s') for the API
+       version.
+ """
+-from django.contrib.gis.maps.google.gmap import GoogleMap
++from django.contrib.gis.maps.google.gmap import GoogleMap, GoogleMapSet
+ from django.contrib.gis.maps.google.overlays import GEvent, GMarker, GPolygon, GPolyline
+ from django.contrib.gis.maps.google.zoom import GoogleZoom
+Index: django/contrib/gis/maps/google/gmap.py
+===================================================================
+--- django/contrib/gis/maps/google/gmap.py	(revisione 9728)
++++ django/contrib/gis/maps/google/gmap.py	(copia locale)
+@@ -11,48 +11,16 @@
+ GOOGLE_MAPS_URL='http://maps.google.com/maps?file=api&amp;v=%s&amp;key='
+ 
+ class GoogleMap(object):
+-    "A class for generating Google Maps JavaScript."
++    "A class for generating a single Google Maps JavaScript instance."
+ 
+     # String constants
+-    onunload = mark_safe('onunload="GUnload()"') # Cleans up after Google Maps
+-    vml_css  = mark_safe('v\:* {behavior:url(#default#VML);}') # CSS for IE VML
+-    xmlns    = mark_safe('xmlns:v="urn:schemas-microsoft-com:vml"') # XML Namespace (for IE VML).
+-
+-    def __init__(self, key=None, api_url=None, version=None, 
+-                 center=None, zoom=None, dom_id='map', load_func='gmap_load', 
++    def __init__(self, 
++                 center=None, zoom=None, dom_id='map',
+                  kml_urls=[], polygons=[], polylines=[], markers=[],
+-                 template='gis/google/js/google-map.js',
+                  extra_context={}):
+ 
+-        # The Google Maps API Key defined in the settings will be used
+-        #  if not passed in as a parameter.  The use of an API key is
+-        #  _required_.
+-        if not key:
+-            try:
+-                self.key = settings.GOOGLE_MAPS_API_KEY
+-            except AttributeError:
+-                raise GoogleMapException('Google Maps API Key not found (try adding GOOGLE_MAPS_API_KEY to your settings).')
+-        else:
+-            self.key = key
+-        
+-        # Getting the Google Maps API version, defaults to using the latest ("2.x"),
+-        #  this is not necessarily the most stable.
+-        if not version:
+-            self.version = getattr(settings, 'GOOGLE_MAPS_API_VERSION', '2.x')
+-        else:
+-            self.version = version
+-
+-        # Can specify the API URL in the `api_url` keyword.
+-        if not api_url:
+-            self.api_url = mark_safe(getattr(settings, 'GOOGLE_MAPS_URL', GOOGLE_MAPS_URL) % self.version)
+-        else:
+-            self.api_url = api_url
+-
+-        # Setting the DOM id of the map, the load function, the JavaScript
+-        # template, and the KML URLs array.
++        # Setting the DOM id of the map and the KML URLs array.
+         self.dom_id = dom_id
+-        self.load_func = load_func
+-        self.template = template
+         self.kml_urls = kml_urls
+         
+         # Does the user want any GMarker, GPolygon, and/or GPolyline overlays?
+@@ -94,18 +62,72 @@
+         self.center = center
+ 
+         # Setting the parameters for the javascript template.
+-        params = {'calc_zoom' : self.calc_zoom,
++        self.params = {'calc_zoom' : self.calc_zoom,
+                   'center' : self.center,
+                   'dom_id' : self.dom_id,
+                   'kml_urls' : self.kml_urls,
+-                  'load_func' : self.load_func,
+                   'zoom' : self.zoom,
+                   'polygons' : self.polygons,
+                   'polylines' : self.polylines,
+                   'markers' : self.markers,
+                   }
+-        params.update(extra_context)
++        self.params.update(extra_context)
++
++class GoogleMapSet(object):
++    onunload = mark_safe('onunload="GUnload()"') # Cleans up after Google Maps
++    vml_css  = mark_safe('v\:* {behavior:url(#default#VML);}') # CSS for IE VML
++    xmlns    = mark_safe('xmlns:v="urn:schemas-microsoft-com:vml"') # XML Namespace (for IE VML).
++
++    def __init__(self, maps, key=None, api_url=None, version=None, 
++                 load_func='gmap_load',template='gis/google/js/google-map.js'):
++        # The Google Maps API Key defined in the settings will be used
++        #  if not passed in as a parameter.  The use of an API key is
++        #  _required_.
++        if not key:
++            try:
++                self.key = settings.GOOGLE_MAPS_API_KEY
++            except AttributeError:
++                raise GoogleMapException('Google Maps API Key not found (try adding GOOGLE_MAPS_API_KEY to your settings).')
++        else:
++            self.key = key
++        
++        # Getting the Google Maps API version, defaults to using the latest ("2.x"),
++        #  this is not necessarily the most stable.
++        if not version:
++            self.version = getattr(settings, 'GOOGLE_MAPS_API_VERSION', '2.x')
++        else:
++            self.version = version
++
++        # Can specify the API URL in the `api_url` keyword.
++        if not api_url:
++            self.api_url = mark_safe(getattr(settings, 'GOOGLE_MAPS_URL', GOOGLE_MAPS_URL) % self.version)
++        else:
++            self.api_url = api_url
++
++        params = {'maps'     : [g.params for g in maps],
++                  'load_func': load_func}
++
++        # keep sure dom ids are unique, if they are not they must be regenerated
++        dom_ids = {}
++        dom_ids_unique = True
++        dom_counter = 0
++        for g in params['maps']:
++            g['id'] = dom_counter
++            dom_counter = dom_counter+1
++
++            if(not dom_ids.has_key(g['dom_id'])): dom_ids[g['dom_id']] = 1
++            else: dom_ids_unique = False
++
++        if(not dom_ids_unique):
++            dom_counter = 1
++            for g in params['maps']:
++                g['dom_id'] = 'map_%d' % dom_counter
++                dom_counter = dom_counter + 1
++                
++        self.template = template
++        
+         self.js = render_to_string(self.template, params)
++        self.maps = params['maps']
+ 
+     @property
+     def body(self):
+@@ -136,3 +158,4 @@
+     def xhtml(self):
+         "Returns XHTML information needed for IE VML overlays."
+         return mark_safe('<html xmlns="http://www.w3.org/1999/xhtml" %s>' % self.xmlns)
++
+Index: django/contrib/gis/maps/google/overlays.py
+===================================================================
+--- django/contrib/gis/maps/google/overlays.py	(revisione 9728)
++++ django/contrib/gis/maps/google/overlays.py	(copia locale)
+@@ -184,7 +184,7 @@
+           return render_to_response('mytemplate.html', 
+                  {'google' : GoogleMap(markers=[marker])})
+     """
+-    def __init__(self, geom, title=None):
++    def __init__(self, geom, title=None, icon=None):
+         """
+         The GMarker object may initialize on GEOS Points or a parameter
+         that may be instantiated into a GEOS point.  Keyword options map to
+@@ -193,6 +193,8 @@
+         Keyword Options:
+          title: 
+            Title option for GMarker, will be displayed as a tooltip.
++         icon:
++           Icon option(s) for GMarker ({path, width, height} or just "path" as a string)
+         """
+         # If a GEOS geometry isn't passed in, try to construct one.
+         if isinstance(geom, basestring): geom = fromstr(geom)
+@@ -205,6 +207,8 @@
+         self.envelope = geom.envelope
+         # TODO: Add support for more GMarkerOptions
+         self.title = title
++	if(isinstance(icon, basestring)): icon = {'path': icon}
++        self.icon = icon
+         super(GMarker, self).__init__()
+ 
+     def latlng_from_coords(self, coords):
+@@ -213,8 +217,20 @@
+     def options(self):
+         result = []
+         if self.title: result.append('title: "%s"' % self.title) 
++        if self.icon: result.append('icon: %s' % self.getIcon())
+         return '{%s}' % ','.join(result)
+ 
++    def getIcon(self):
++	params = []
++	params.append("""'%s'""" % self.icon['path']);
++	if (self.icon.has_key('width') and self.icon.has_key('height')):
++		params.append(self.icon['width']);
++		params.append(self.icon['height']);
++
++        s = """gmap_getIcon(%s)""" % ",".join(params);
++	return s
++
+     @property
+     def js_params(self):
+         return '%s, %s' % (self.latlng, self.options())
++

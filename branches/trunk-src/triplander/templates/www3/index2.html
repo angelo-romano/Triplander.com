@@ -1,0 +1,138 @@
+{% extends "www3/base.html" %}
+
+{% block js_external_scripts %}
+<script type="text/javascript" src="{% url js_script "mgmt.index.js" %}"></script>
+{% endblock %}
+
+{% block js_base_settings %}
+{% with tl_googlemaps.maps.0 as tl_gmap %}
+mapCenter: new GLatLng({{ tl_gmap.center.1 }},{{ tl_gmap.center.0 }}),
+{% endwith %}
+{% endblock %}
+
+{% block js_onunload %}{% endblock %}
+
+{% block js_onload %}
+//$("#geomap_popup").css("display","none");
+searchform_activate('city');
+
+// city autocompleter
+$("#searchfield_city_which").autocomplete("{% url blue_autocomplete_city %}",{
+    minChars: 2,
+	formatItem: formatAutocompleter,
+	setHiddenValues: setCityAutocompleterHidden});
+	
+// country autocompleters
+$("#searchfield_country_which").autocomplete("{% url blue_autocomplete_country %}",{
+    minChars: 1,
+	formatItem: formatAutocompleter,
+	setHiddenValues: setCountryAutocompleterHidden});
+	$("#addcity_country").autocomplete("{% url blue_autocomplete_country %}",{
+	    minChars: 1,
+		formatItem: formatAutocompleter});
+
+//GeoMap event handling
+GEvent.addListener(geodjango.{{tl_googlemaps.dom_ids.0}}, "moveend", refreshMapBoundary);
+GEvent.addListener(geodjango.{{tl_googlemaps.dom_ids.0}}, "zoomend", refreshMapBoundary);
+{% endblock %}
+
+{% block content %}
+<!--
+		<div class="collapsable_box">
+			<button class="minimize"></button>
+			<h2>Your History</h2>
+			{% for item in cities %}
+			<p>{{ item.name }} [{{ item.latitude }}, {{ item.longitude }}]</p>
+			{% endfor %}
+		</div>
+		<div class="collapsable_box">
+			<button class="minimize"></button>
+			<h2>Your Settings</h2>
+			{% for item in languages %}
+			<p>{{ item.name }} [{{ item.local_name }}]</p>
+			{% endfor %}
+		</div>
+		<div class="collapsable_box">
+			<button class="minimize"></button>
+			<h2>Your Profile</h2>
+		</div>
+-->
+		<!-- BEGIN[Search_Box] -->
+		<div id="search_box">
+			<!-- BEGIN[Search_Box_City] -->
+			<div class="search_box_variant" id="search_box_city">
+                <div class="count_info">
+                <p><em>{{tl_info.num_cities}}</em> cities</p>
+                </div>
+                <h2>Search<span class="search_box_type">City</span></h2>
+                <form method="post" action="{% url city_searchpost %}" 
+                onsubmit="submitAutocompleteLocationForm('city',this); return false;">
+				<fieldset id="searchfieldset_city_from" style="display: inline;">
+					<label for="searchfield_city_which">Say it here:</label>
+					<input type="text" value="" name="query" id="searchfield_city_which"/>
+					<input type="hidden" value="" id="searchfield_city_id" />
+					<input type="submit" class="go" value=""></input>
+				<br />
+				<p style="text-align: center; font-style: italic">...or use the 
+				<a style="border-bottom: 1px dotted black" onmouseover="this.style.cursor='pointer'" 
+				onfocus="this.blur();" 
+				onclick="showGeoMapPopup();">
+				Map Locator
+				</a></p>
+				</fieldset>
+				</form>
+			</div>
+			<!-- END[Search_Box_City] -->
+			<!-- BEGIN[Search_Box_Country] -->
+			<div class="search_box_variant" id="search_box_country">
+                <div class="count_info">
+                <p><em>{{tl_info.num_countries}}</em> countries</p>
+                </div>
+				<h2>Search<span class="search_box_type">Country</span></h2>
+			    <form method="post" action="{% url country_searchpost %}" 
+                onsubmit="submitAutocompleteLocationForm('country',this); return false;">
+				<fieldset id="searchfieldset_country_from" style="display: inline;">
+					<label for="searchfield_country_which">Say it here:</label>
+					<input type="text" value="" name="query" id="searchfield_country_which"/>
+					<input type="hidden" value="" id="searchfield_country_id" />
+					<input type="submit" class="go" value=""></input>
+				</fieldset>
+				</form>
+			</div>
+			<!-- END[Search_Box_Country] -->
+			<div id="search_box_footer">
+				<p>Alternative searches &rarr; 
+				<span class="searchtype_link" id="href_search_city" style="display: none;"><a href="#" onclick="searchform_activate('city');">City</a></span>
+				<span class="searchtype_link" id="href_search_country"><a href="javascript:searchform_activate('country');">Country</a></span>
+				</p>
+				{% if tl_logged_user.can_add_cities %}
+				<p>Other operations &rarr; 
+				<span class="searchtype_link"><a href="javascript:show_addcity();">Add a new city</a></span>
+				</p>
+				{% endif %}
+			</div>
+			</div>
+		<!-- END[Search_Box] -->
+		<!-- The Map -->
+		{% if tl_googlemaps_active %}
+		<div class="popup" id="geomap_popup">
+		<div id="{{ tl_googlemaps.dom_ids.0 }}" class="googlemap_large"></div>
+		<button class="close_button" title="Close" onclick="$('#geomap_popup').css('display','none');"></button>
+		</div>
+		{% endif %}
+		
+		<!-- Addcity popup -->
+		{% if tl_logged_user.can_add_cities %}
+		<div class="popup" id="addcity_popup">
+        <div class="loading">Loading...</div>
+		<button class="close_button" title="Close" onclick="$('#addcity_popup').css('display','none');"></button>
+		<fieldset>
+		<label for="addcity_name">Name:</label>
+		<input type="text" id="addcity_name" value="" /><br />
+		<label for="addcity_country">Country:</label>
+		<input type="text" value="" id="addcity_country"/><br />
+		<button onclick="process_addcity()">Add</button>
+		</fieldset>
+		</div>
+		{% endif %}
+{% endblock %}

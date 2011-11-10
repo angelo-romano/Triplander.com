@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/!svn/ver/47/branches/trunk-src/triplander
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/44/branches/trunk-src/triplander/admin.py
+END
+manage.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/44/branches/trunk-src/triplander/manage.py
+END
+remote.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/44/branches/trunk-src/triplander/remote.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/44/branches/trunk-src/triplander/views.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/!svn/ver/44/branches/trunk-src/triplander/__init__.py
+END
+cron.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/!svn/ver/44/branches/trunk-src/triplander/cron.py
+END
+tests.py
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/44/branches/trunk-src/triplander/tests.py
+END
+functions.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/44/branches/trunk-src/triplander/functions.py
+END
+middleware.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/!svn/ver/44/branches/trunk-src/triplander/middleware.py
+END
+parsers.py
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/44/branches/trunk-src/triplander/parsers.py
+END
+update.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/44/branches/trunk-src/triplander/update.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/44/branches/trunk-src/triplander/models.py
+END
+svglander.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/44/branches/trunk-src/triplander/svglander.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/!svn/ver/44/branches/trunk-src/triplander/urls.py
+END
+geoinfo.py
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/44/branches/trunk-src/triplander/geoinfo.py
+END

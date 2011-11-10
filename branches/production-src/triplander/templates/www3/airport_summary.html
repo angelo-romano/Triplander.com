@@ -1,0 +1,44 @@
+{% extends "www3/base.html" %}
+{% block js_external_scripts %}
+{% endblock %}
+{% block js_onload %}
+{% endblock %}
+{% block content %}
+<div id="geosummary">
+{% if tl_title %}
+<h2><img class="flagMini" alt="Flag" src="{{ tl_country_icon }}" />{{ tl_title }}</h2>
+<div class="content">
+<div class="col2_leftalign">
+
+<div class="widget_left">
+<h3>Base city</h3>
+
+<h3>Closest cities</h3>
+</div>
+
+</div>
+
+<div class="col2_rightalign">
+<div class="widget_right" id="country_info_widget">
+<h3>Info</h3>
+<ul>
+<li><strong>IATA code</strong>: {{ tl_code }}</li>
+{{% if tl_website %}}
+<li><strong>Website</strong>: <a href="{{tl_website}}">{{ tl_website }}</a></li>
+</ul>
+</div>
+//-->
+{% if tl_skyscanner_active %}
+<!-- Skyscanner widget -->
+<div class="widget_right">
+</div>
+{% endif %}
+
+</div>
+<div class="col2_spaceline"></div>
+</div>
+{% else %}
+<h2>Airport not found</h2>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "www3/base.html" %}
+{% block js %}
+{% if tl_googlemaps_active %}
+function tl_showCityInMap(myX,myY) {
+	geodjango.{{tl_googlemaps.dom_ids.0}}.setCenter(new GLatLng(myX,myY));
+}
+{% endif %}
+{% endblock %}
+{% block content %}
+<div class="col2_leftalign">
+
+{% if tl_city %}
+<h2>Airports nearby <a href="{% url city_by_id tl_city.id,tl_city.slug %}">{{ tl_city.name }}</a></h2>
+{% for item in tl_airports %}
+<p class="evidence" onclick="tl_showCityInMap({{ item.x }}, {{ item.y }});">
+<img class="flagMini" alt="Flag" src="{{ item.img }}" />
+{{item.name}} [{{item.code}}]<br />{{item.city}}, {{item.country}} &rarr; {{item.distance}} km
+</p>
+{% endfor %}
+{% else %}
+<h2>City not found</h2>
+{% endif %}
+</div>
+{% if tl_city and tl_googlemaps_active %}
+<div class="col2_rightalign">
+<div id="{{ tl_googlemaps.dom_ids.0 }}" class="googlemap_medium col2_rightalign"></div>
+</div>
+{% endif %}
+{% endblock %}
